@@ -23,6 +23,16 @@ struct ContentView: View {
                 }
                 .onDelete(perform: deleteTrips)
             }
+            .listStyle(.plain)
+            .listRowSeparator(.hidden)
+            .scrollContentBackground(.hidden)
+            .background(
+                LinearGradient(
+                    colors: [Color.blue.opacity(0.06), Color.purple.opacity(0.06)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
             .navigationTitle("My Trips")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

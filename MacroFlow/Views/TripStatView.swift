@@ -5,7 +5,7 @@
 //  Created by Tristan Norbury on 8/8/2025.
 //
 
-import SwiftUICore
+import SwiftUI
 
 
 struct TripStatView: View {

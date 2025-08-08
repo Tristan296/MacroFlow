@@ -28,10 +28,9 @@ struct TripCardView: View {
                 ForEach(trip.tags, id: \.self) { tag in
                     Text(tag)
                         .font(.caption)
-                        .padding(.horizontal, 6)
+                        .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(6)
+                        .background(Capsule().fill(Color.gray.opacity(0.15)))
                 }
             }
 
@@ -53,7 +52,7 @@ struct TripCardView: View {
                     Text("Overall Progress")
                         .font(.subheadline)
                     Spacer()
-                    Text("\(Int(trip.progress))%")
+                    Text("\(Int(trip.progress * 100))%")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                     Text(trip.status)
@@ -63,8 +62,8 @@ struct TripCardView: View {
                         .cornerRadius(5)
                 }
 
-                ProgressView(value: trip.progress / 100)
-                    .accentColor(.blue)
+                ProgressView(value: trip.progress, total: 1.0)
+                    .tint(.blue)
             }
 
             // Task Stats
@@ -86,7 +85,7 @@ struct TripCardView: View {
                 HStack {
                     Label(trip.nextTask?.title ?? "No next task", systemImage: "airplane.departure")
                     Spacer()
-                    if trip.nextTask?.priority == "HIGH" {
+                    if trip.nextTask?.priority.uppercased() == "HIGH" {
                         Text("HIGH")
                             .font(.caption)
                             .foregroundColor(.red)
@@ -118,9 +117,15 @@ struct TripCardView: View {
                 .fontWeight(.medium)
         }
         .padding()
-        .background(Color.white)
-        .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.05), radius: 6, x: 0, y: 3)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(.secondarySystemBackground))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.black.opacity(0.05))
+        )
+        .shadow(color: Color.black.opacity(0.04), radius: 4, x: 0, y: 2)
     }
 }
 
