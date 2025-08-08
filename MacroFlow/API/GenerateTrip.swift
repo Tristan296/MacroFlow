@@ -1,3 +1,11 @@
+//
+//  GenerateTrip.swift
+//  MacroFlow
+//
+//  Created by Tristan Norbury on 8/8/2025.
+//
+
+
 import Foundation
 
 func generateTrip(interests: String, startDate: Date, endDate: Date, completion: @escaping (Trip?) -> Void) {

@@ -1,6 +1,23 @@
+//
+//  TripSectionView.swift
+//  MacroFlow
+//
+//  Created by Tristan Norbury on 8/8/2025.
+//
+
+import SwiftUI
+
+
 struct TripSectionView: View {
     var sectionTitle: String
     var progress: Double
+
+    private let actionItems: [ActionItem] = [
+        ActionItem(type: .regenerate),
+        ActionItem(type: .suggest),
+        ActionItem(type: .searchAndBook),
+        ActionItem(type: .addSubTask)
+    ]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -15,33 +32,33 @@ struct TripSectionView: View {
                 .accentColor(.purple)
 
             HStack(spacing: 12) {
-                ActionButton(title: "AI Regenerate", icon: "arrow.clockwise")
-                ActionButton(title: "AI Suggestions", icon: "lightbulb")
-                ActionButton(title: "Search & Book", icon: "magnifyingglass")
-                ActionButton(title: "Add Subtask", icon: "plus")
+                ForEach(actionItems) { item in
+                    ActionButton(title: item.type.title, icon: item.type.icon) {
+                        handleAction(item.type)
+                    }
+                }
             }
         }
         .padding()
         .background(Color.gray.opacity(0.05))
         .cornerRadius(12)
     }
-}
 
-struct ActionButton: View {
-    let title: String
-    let icon: String
-
-    var body: some View {
-        Button(action: {}) {
-            HStack {
-                Image(systemName: icon)
-                Text(title)
-                    .font(.caption)
-            }
-            .padding(6)
-            .background(Color.white)
-            .cornerRadius(8)
-            .shadow(radius: 1)
+    // 🎯 Add the handler method here
+    private func handleAction(_ action: TripActionType) {
+        switch action {
+        case .regenerate:
+            print("Regenerate AI action triggered.")
+        case .suggest:
+            print("AI Suggestions action triggered.")
+        case .searchAndBook:
+            print("Search & Book action triggered.")
+        case .addSubTask:
+            print("Add Subtask action triggered.")
         }
     }
+}
+
+#Preview {
+    TripSectionView(sectionTitle: "Trip to sydney", progress: 1.0)
 }

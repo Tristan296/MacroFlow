@@ -28,7 +28,17 @@ struct AddTripView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Add") {
-                        let newTrip = Trip(title: title, destination: destination, startDate: startDate, endDate: endDate)
+                        let dateRange = DateInterval(start: startDate, end: endDate)
+
+                        let newTrip = Trip(
+                            destination: destination,
+                            tripDescription: title, // You might swap this if you want title separate
+                            tags: [],
+                            location: destination,
+                            dateRange: dateRange,
+                            progress: 0.0
+                        )
+
                         modelContext.insert(newTrip)
                         dismiss()
                     }

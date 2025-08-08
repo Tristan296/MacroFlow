@@ -29,9 +29,37 @@
 		6AF0EEF12E456552009D1A13 /* MacroFlowUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacroFlowUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6AF0EF1E2E4570BE009D1A13 /* Exceptions for "MacroFlow" folder in "MacroFlow" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				API/GenerateTrip.swift,
+				API/ParseTrip.swift,
+				Helpers/Action.swift,
+			);
+			target = 6AF0EED72E456551009D1A13 /* MacroFlow */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		6AF0EF1F2E4570BE009D1A13 /* Exceptions for "MacroFlow" folder in "Copy Bundle Resources" phase from "MacroFlow" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 6AF0EED62E456551009D1A13 /* Resources */;
+			membershipExceptions = (
+				API/GenerateTrip.swift,
+				API/ParseTrip.swift,
+				Helpers/Action.swift,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6AF0EEDA2E456551009D1A13 /* MacroFlow */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6AF0EF1E2E4570BE009D1A13 /* Exceptions for "MacroFlow" folder in "MacroFlow" target */,
+				6AF0EF1F2E4570BE009D1A13 /* Exceptions for "MacroFlow" folder in "Copy Bundle Resources" phase from "MacroFlow" target */,
+			);
 			path = MacroFlow;
 			sourceTree = "<group>";
 		};

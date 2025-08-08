@@ -1,17 +1,25 @@
+//
+//  TripTask.swift
+//  MacroFlow
+//
+//  Created by Tristan Norbury on 8/8/2025.
+//
+
+
 import Foundation
 
 struct TripTask: Identifiable, Codable, Hashable {
     let id: UUID
     var title: String
     var dueDate: Date
-    var priority: Int // 1: High, 2: Medium, 3: Low
+    var priority: String
     var isCompleted: Bool
 
     init(
         id: UUID = UUID(),
         title: String,
         dueDate: Date,
-        priority: Int = 2,
+        priority: String = "High",
         isCompleted: Bool = false
     ) {
         self.id = id

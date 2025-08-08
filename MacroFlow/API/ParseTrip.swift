@@ -1,3 +1,12 @@
+//
+//  ParseTrip.swift
+//  MacroFlow
+//
+//  Created by Tristan Norbury on 8/8/2025.
+//
+import SwiftUI
+import Foundation
+
 func parseTripFrom(content: String, interests: String, startDate: Date, endDate: Date) -> Trip {
     // Very naive parsing — you should refine this using structured prompts or JSON output
     let title = content.components(separatedBy: "\n").first ?? "AI Trip"

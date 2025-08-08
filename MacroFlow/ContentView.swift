@@ -1,55 +1,57 @@
-//
-//  ContentView.swift
-//  MacroFlow
-//
-//  Created by Tristan Norbury on 8/8/2025.
-//
-
 import SwiftUI
 import SwiftData
 
+
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
+    @Query private var trips: [Trip]
+    @State private var showingAddTrip = false
+  
     var body: some View {
         NavigationSplitView {
             List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                ForEach(trips) { trip in
+                    // Precompute date strings
+                    let startDateString = trip.dateRange.start.formatted(date: .abbreviated, time: .omitted)
+                    let endDateString = trip.dateRange.end.formatted(date: .abbreviated, time: .omitted)
+                    let dateRangeString = "\(startDateString) to \(endDateString)"
+
+                    NavigationLink(destination: TripDetailView(trip: trip)) {
+                        // Use your TripCardView here to show trip summary
+                        TripCardView(trip: trip)
                     }
                 }
-                .onDelete(perform: deleteItems)
+                .onDelete(perform: deleteTrips)
             }
+            .navigationTitle("My Trips")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
                 ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                    Button(action: { showingAddTrip = true }) {
+                        Label("Add Trip", systemImage: "plus")
                     }
                 }
             }
         } detail: {
-            Text("Select an item")
+            // Show detail for the selected trip or placeholder text
+            if let selectedTrip = trips.first {
+                TripDetailView(trip: selectedTrip)
+            } else {
+                Text("Select a trip")
+                    .foregroundColor(.secondary)
+            }
+        }
+        .sheet(isPresented: $showingAddTrip) {
+            AddTripView()
         }
     }
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
+    private func deleteTrips(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(items[index])
+                modelContext.delete(trips[index])
             }
         }
     }
@@ -57,5 +59,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: Trip.self, inMemory: true)
 }

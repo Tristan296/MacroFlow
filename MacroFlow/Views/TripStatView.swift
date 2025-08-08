@@ -1,3 +1,13 @@
+//
+//  TripStatView.swift
+//  MacroFlow
+//
+//  Created by Tristan Norbury on 8/8/2025.
+//
+
+import SwiftUICore
+
+
 struct TripStatView: View {
     let label: String
     let value: Int

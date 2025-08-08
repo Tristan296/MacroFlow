@@ -1,3 +1,11 @@
+//
+//  TripCardView.swift
+//  MacroFlow
+//
+//  Created by Tristan Norbury on 8/8/2025.
+//
+
+
 import SwiftUI
 
 struct TripCardView: View {
@@ -11,7 +19,7 @@ struct TripCardView: View {
                 .fontWeight(.bold)
 
             // Description
-            Text(trip.description)
+            Text(trip.tripDescription)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
 
@@ -30,7 +38,11 @@ struct TripCardView: View {
             // Location and Dates
             HStack(spacing: 10) {
                 Label(trip.location, systemImage: "mappin.and.ellipse")
-                Label(trip.dateRange, systemImage: "calendar")
+                Label(
+                    "\(trip.dateRange.start.formatted(date: .abbreviated, time: .omitted)) - \(trip.dateRange.end.formatted(date: .abbreviated, time: .omitted))",
+                    systemImage: "calendar"
+                )
+
             }
             .font(.caption)
             .foregroundColor(.gray)
@@ -57,9 +69,9 @@ struct TripCardView: View {
 
             // Task Stats
             HStack {
-                TripStatView(label: "Completed", value: trip.completed, color: .green)
-                TripStatView(label: "Remaining", value: trip.remaining, color: .blue)
-                TripStatView(label: "Overdue", value: trip.overdue, color: .red)
+                TripStatView(label: "Completed", value: trip.completedTasks, color: .green)
+                TripStatView(label: "Remaining", value: trip.remainingTasks, color: .blue)
+                TripStatView(label: "Overdue", value: trip.overdueTasks, color: .red)
             }
 
             Divider()
@@ -72,9 +84,9 @@ struct TripCardView: View {
                     .foregroundColor(.gray)
 
                 HStack {
-                    Label(trip.nextTask.title, systemImage: "airplane.departure")
+                    Label(trip.nextTask?.title ?? "No next task", systemImage: "airplane.departure")
                     Spacer()
-                    if trip.nextTask.priority == "HIGH" {
+                    if trip.nextTask?.priority == "HIGH" {
                         Text("HIGH")
                             .font(.caption)
                             .foregroundColor(.red)
@@ -89,8 +101,11 @@ struct TripCardView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "clock")
                         .font(.caption)
-                    Text("Due \(trip.nextTask.dueDate)")
-                        .font(.caption)
+                    if let nextTask = trip.nextTask {
+                        Text("Due \(nextTask.dueDate.formatted(date: .abbreviated, time: .omitted))")
+                            .font(.caption)
+
+                    }
                     Image(systemName: "exclamationmark.triangle")
                         .font(.caption)
                         .foregroundColor(.red)
@@ -109,20 +124,34 @@ struct TripCardView: View {
     }
 }
 
-struct TripStatView: View {
-    let label: String
-    let value: Int
-    let color: Color
+func dateFromString(_ string: String) -> Date {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd"
+    return formatter.date(from: string) ?? Date()
+}
 
-    var body: some View {
-        VStack {
-            Text("\(value)")
-                .font(.title3)
-                .foregroundColor(color)
-            Text(label)
-                .font(.caption)
-                .foregroundColor(.gray)
-        }
-        .frame(maxWidth: .infinity)
-    }
+
+#Preview {
+    let start = dateFromString("2021-09-01")
+    let end = dateFromString("2021-09-10")
+    let dateInterval = DateInterval(start: start, end: end)
+
+    TripCardView(trip: Trip(
+        destination: "Tokyo, Japan",
+        tripDescription: "Cultural exploration and business meetings",
+        tags: ["Business", "Culture", "Solo"],
+        location: "Tokyo, Japan",
+        dateRange: dateInterval,
+        progress: 0.54,
+        status: "In Progress",
+        completedTasks: 8,
+        remainingTasks: 8,
+        overdueTasks: 1,
+        nextTask: TripTask(
+            title: "Book return flight",
+            dueDate: dateFromString("2021-10-10"),
+            priority: "HIGH"
+        ),
+        estimatedTimeRemaining: 6.5
+    ))
 }

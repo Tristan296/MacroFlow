@@ -10,10 +10,14 @@ import SwiftData
 
 @main
 struct MacroFlowApp: App {
+    // Shared ModelContainer for the app
     var sharedModelContainer: ModelContainer = {
+        // Register all your model types here
         let schema = Schema([
-            Item.self,
+            Trip.self,
+            // Add other models here if any
         ])
+
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
@@ -26,7 +30,7 @@ struct MacroFlowApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .modelContainer(sharedModelContainer) // Attach the container here
         }
-        .modelContainer(sharedModelContainer)
     }
 }
