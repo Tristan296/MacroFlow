@@ -18,7 +18,7 @@ struct TripDetailView: View {
                     .font(.subheadline)
                     .foregroundColor(.secondary)
 
-                ProgressView("Overall Progress", value: trip.progress)
+                ProgressView("Overall Progress", value: trip.progress, total: 1.0)
                     .padding(.top)
 
                 // Add one or more TripSectionViews here

@@ -29,7 +29,7 @@ struct TripSectionView: View {
             }
 
             ProgressView(value: progress / 100)
-                .accentColor(.purple)
+                .tint(.purple)
 
             HStack(spacing: 12) {
                 ForEach(actionItems) { item in
@@ -60,5 +60,5 @@ struct TripSectionView: View {
 }
 
 #Preview {
-    TripSectionView(sectionTitle: "Trip to sydney", progress: 1.0)
+    TripSectionView(sectionTitle: "Trip to sydney", progress: 75)
 }

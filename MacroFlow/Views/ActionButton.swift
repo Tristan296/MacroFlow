@@ -14,16 +14,15 @@ struct ActionButton: View {
     let action: () -> Void  
 
     var body: some View {
-        Button(action: {}) {
+        Button(action: action) {
             HStack {
                 Image(systemName: icon)
                 Text(title)
                     .font(.caption)
             }
             .padding(6)
-            .background(Color.white)
-            .cornerRadius(8)
-            .shadow(radius: 1)
         }
+        .buttonStyle(.bordered)
+        .controlSize(.small)
     }
 }
