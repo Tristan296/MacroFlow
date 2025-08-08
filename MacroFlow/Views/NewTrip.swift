@@ -15,7 +15,10 @@ struct CreateTripView: View {
     @State var interests: String = ""
     @State private var tripGoal = ""
 
-    
+    @State private var isLoading = false
+    @State private var planSummary: String = ""
+    @State private var suggestedTasks: [String] = []
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -53,16 +56,40 @@ struct CreateTripView: View {
                     Button(action: generateTrip) {
                         HStack {
                             Image(systemName: "sparkles")
-                            Text("Generate Trip Plan")
+                            Text(isLoading ? "Generating..." : "Generate Trip Plan")
                                 .fontWeight(.bold)
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.blue)
+                        .background(isLoading ? Color.gray : Color.blue)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                     }
-                    
+                    .disabled(isLoading || destination.isEmpty || tripGoal.isEmpty)
+
+                    if !planSummary.isEmpty || !suggestedTasks.isEmpty {
+                        Divider()
+                        VStack(alignment: .leading, spacing: 12) {
+                            if !planSummary.isEmpty {
+                                Text("Plan Summary")
+                                    .font(.headline)
+                                Text(planSummary)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            if !suggestedTasks.isEmpty {
+                                Text("Suggested Tasks")
+                                    .font(.headline)
+                                ForEach(suggestedTasks, id: \.self) { task in
+                                    HStack(alignment: .top) {
+                                        Image(systemName: "checkmark.circle")
+                                        Text(task)
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     Text("💡 Tip: Be specific in your goal description for better AI suggestions.")
                         .font(.footnote)
                         .foregroundColor(.gray)
@@ -75,10 +102,26 @@ struct CreateTripView: View {
         }
     }
 
-    func generateTrip() {
-        // Call backend AI trip planner (OpenAI / HuggingFace)
-        // Pass: tripGoal, destination, budgetRange, startDate, endDate, interests
-        // Result: list of macro tasks and subtasks
+    @MainActor
+    private func generateTrip() {
+        isLoading = true
+        Task {
+            defer { isLoading = false }
+            do {
+                let plan = try await AIService.shared.generateTripPlan(
+                    goal: tripGoal,
+                    destination: destination,
+                    budgetRange: budgetRange.isEmpty ? nil : budgetRange,
+                    startDate: startDate,
+                    endDate: endDate,
+                    interests: interests.split(separator: ',').map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                )
+                planSummary = plan.summary
+                suggestedTasks = plan.suggestedTasks
+            } catch {
+                planSummary = "Failed to generate plan. Please try again."
+                suggestedTasks = []
+            }
+        }
     }
-
 }
